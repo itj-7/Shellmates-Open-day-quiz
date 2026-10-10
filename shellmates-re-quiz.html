@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Shellmates: Who Said It? (Resident Evil)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Oswald:wght@400;500;600&family=Special+Elite&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #150709;
+        --card: #1d0b0f;
+        --card2: #26101510;
+        --card3: #2a1217;
+        --line: #4a1a22;
+        --red: #8a0d18;
+        --red2: #b01220;
+        --red3: #e0283a;
+        --ink: #f2e6e4;
+        --mute: #a38a8c;
+        --r: 16px;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        color-scheme: dark;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+        -webkit-text-size-adjust: 100%;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          "Oswald",
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Arial,
+          sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .bg {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        transition: filter 0.6s;
+        background:
+          radial-gradient(
+            80% 50% at 50% 0%,
+            rgba(176, 18, 32, 0.38),
+            transparent 70%
+          ),
+          radial-gradient(
+            70% 45% at 85% 100%,
+            rgba(110, 14, 30, 0.45),
+            transparent 70%
+          ),
+          radial-gradient(
+            60% 40% at 5% 70%,
+            rgba(70, 12, 40, 0.4),
+            transparent 70%
+          ),
+          repeating-linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.018) 0 2px,
+            transparent 2px 14px
+          ),
+          repeating-linear-gradient(
+            -45deg,
+            rgba(0, 0, 0, 0.18) 0 2px,
+            transparent 2px 14px
+          ),
+          linear-gradient(180deg, #2a0d12, #160709 55%, #10050a);
+      }
+      body.lost .bg {
+        filter: saturate(1.8) brightness(1.15);
+      }
+      .fog {
+        position: fixed;
+        left: -40%;
+        right: -40%;
+        height: 40%;
+        pointer-events: none;
+        z-index: 0;
+        background: radial-gradient(
+          closest-side,
+          rgba(220, 150, 160, 0.12),
+          transparent
+        );
+        animation: drift 24s linear infinite alternate;
+        will-change: transform;
+      }
+      .fog.a {
+        top: 25%;
+      }
+      .fog.b {
+        bottom: 2%;
+        animation-duration: 34s;
+        animation-direction: alternate-reverse;
+      }
+      @keyframes drift {
+        from {
+          transform: translateX(-14%);
+        }
+        to {
+          transform: translateX(14%);
+        }
+      }
+      .vig {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 50%,
+          rgba(0, 0, 0, 0.6)
+        );
+        animation: flick 9s steps(1) infinite;
+      }
+      @keyframes flick {
+        0%,
+        90%,
+        94%,
+        100% {
+          opacity: 1;
+        }
+        91% {
+          opacity: 0.7;
+        }
+        93% {
+          opacity: 0.88;
+        }
+      }
+      .wrap {
+        position: relative;
+        z-index: 1;
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 0 18px 30px;
+      }
+      .scene {
+        display: block;
+        width: calc(100% + 36px);
+        margin: 0 -18px;
+        height: auto;
+      }
+      .w1 {
+        animation: wf 3.2s steps(1) infinite;
+      }
+      .w2 {
+        animation: wf 4.6s steps(1) infinite 0.8s;
+      }
+      .w3 {
+        animation: wf 5.4s steps(1) infinite 1.7s;
+      }
+      @keyframes wf {
+        0%,
+        100% {
+          opacity: 0.9;
+        }
+        40% {
+          opacity: 0.25;
+        }
+        44% {
+          opacity: 0.9;
+        }
+        70% {
+          opacity: 0.5;
+        }
+      }
+      .eye {
+        animation: bl 6s steps(1) infinite;
+      }
+      @keyframes bl {
+        0%,
+        94%,
+        100% {
+          opacity: 1;
+        }
+        96% {
+          opacity: 0;
+        }
+      }
+      .term {
+        font-family: "Special Elite", "Courier New", monospace;
+        font-size: 13px;
+        color: var(--mute);
+        padding: 10px 0 14px;
+      }
+      .term b {
+        color: var(--red3);
+        font-weight: 400;
+      }
+      .term i {
+        display: inline-block;
+        width: 8px;
+        height: 14px;
+        background: var(--red3);
+        vertical-align: -2px;
+        animation: blink 1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      h1 {
+        font-family: "Nosifer", "Creepster", Impact, sans-serif;
+        font-weight: 400;
+        font-size: 34px;
+        line-height: 1.25;
+        margin: 2px 0 6px;
+        text-transform: uppercase;
+        color: var(--red3);
+        text-shadow: 0 2px 0 #3a0409;
+      }
+      h1 small {
+        display: block;
+        font-family: "Creepster", Impact, sans-serif;
+        font-size: 30px;
+        letter-spacing: 0.08em;
+        color: var(--ink);
+        text-shadow: none;
+        margin-top: 4px;
+      }
+      .rule {
+        height: 2px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--red3), transparent);
+        margin: 12px 0 16px;
+      }
+      p {
+        margin: 0 0 12px;
+        color: #dbc6c8;
+        line-height: 1.55;
+        font-size: 17px;
+      }
+      .screen {
+        animation: in 0.28s ease-out both;
+      }
+      @keyframes in {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        padding: 16px;
+        margin: 14px 0;
+      }
+      .panel h3 {
+        margin: 0 0 10px;
+        font-family: "Creepster", Impact, sans-serif;
+        font-weight: 400;
+        font-size: 24px;
+        letter-spacing: 0.08em;
+        color: var(--red3);
+      }
+      .panel ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .panel li {
+        padding: 9px 0;
+        border-top: 1px solid var(--line);
+        font-size: 17px;
+        color: #ecdcdc;
+      }
+      .panel li:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .tiers {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .tier {
+        border: 1px solid var(--red2);
+        border-radius: 14px;
+        background: var(--card3);
+        padding: 12px 8px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 13px;
+        color: var(--mute);
+      }
+      .tier strong {
+        display: block;
+        font-family: "Creepster", Impact, sans-serif;
+        font-weight: 400;
+        font-size: 44px;
+        color: var(--ink);
+        letter-spacing: 0.02em;
+        line-height: 1.05;
+      }
+      .tier span {
+        display: block;
+        margin-top: 2px;
+        color: var(--red3);
+        font-weight: 600;
+        font-size: 16px;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        min-height: 60px;
+        border: 1px solid var(--red3);
+        border-radius: var(--r);
+        background: linear-gradient(180deg, var(--red2), var(--red));
+        color: #fff;
+        font:
+          600 19px "Oswald",
+          sans-serif;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+          transform 0.1s,
+          opacity 0.2s;
+        margin-top: 18px;
+      }
+      .btn:active:not([disabled]) {
+        transform: scale(0.98);
+      }
+      .btn[disabled] {
+        opacity: 0.4;
+        cursor: default;
+        background: var(--card3);
+        border-color: var(--line);
+        color: var(--mute);
+      }
+      .prog {
+        display: flex;
+        gap: 4px;
+        margin: 14px 0 12px;
+      }
+      .prog i {
+        flex: 1;
+        height: 6px;
+        border-radius: 4px;
+        background: #3a161c;
+        transition: background 0.3s;
+      }
+      .prog i.d {
+        background: var(--red2);
+      }
+      .prog i.c {
+        background: var(--red3);
+      }
+      .meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--mute);
+        margin-bottom: 12px;
+      }
+      .meta b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .quote {
+        background: linear-gradient(180deg, #34141b, #210b11);
+        border: 1px solid var(--red2);
+        border-radius: 20px;
+        margin-bottom: 18px;
+        overflow: hidden;
+      }
+      .qh {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 16px;
+        background: rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid var(--line);
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--mute);
+      }
+      .qh > span:first-child::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--red3);
+        margin-right: 9px;
+        animation: blink 1.4s steps(1) infinite;
+      }
+      .wave {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        height: 16px;
+      }
+      .wave i {
+        width: 3px;
+        height: 100%;
+        border-radius: 2px;
+        background: var(--red3);
+        animation: eq 1s ease-in-out infinite;
+      }
+      .wave i:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .wave i:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      .wave i:nth-child(4) {
+        animation-delay: 0.1s;
+      }
+      .wave i:nth-child(5) {
+        animation-delay: 0.3s;
+      }
+      @keyframes eq {
+        0%,
+        100% {
+          transform: scaleY(0.2);
+        }
+        50% {
+          transform: scaleY(1);
+        }
+      }
+      .qb {
+        padding: 28px 22px 30px;
+        font-family: "Special Elite", "Courier New", monospace;
+        font-size: 23px;
+        line-height: 1.45;
+        color: #fff;
+        text-align: center;
+      }
+      .qm {
+        font-family: "Creepster", Impact, sans-serif;
+        font-size: 46px;
+        color: var(--red3);
+        line-height: 0;
+        vertical-align: -14px;
+        margin: 0 5px;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Creepster", Impact, sans-serif;
+        font-weight: 400;
+        font-size: 22px;
+        letter-spacing: 0.1em;
+        color: var(--red3);
+        margin: 16px 0 10px;
+      }
+      .step::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .opt {
+        min-height: 62px;
+        padding: 10px 12px;
+        background: var(--card);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        font:
+          500 17px/1.2 "Oswald",
+          sans-serif;
+        letter-spacing: 0.03em;
+        text-align: center;
+        cursor: pointer;
+        transition:
+          background 0.12s,
+          border-color 0.12s,
+          transform 0.1s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .opt:active {
+        transform: scale(0.97);
+      }
+      .opt.sel {
+        background: linear-gradient(180deg, var(--red2), var(--red));
+        border-color: var(--red3);
+        color: #fff;
+      }
+      .icon {
+        display: block;
+        margin: 12px auto 0;
+        width: 96px;
+        height: 96px;
+      }
+      .score {
+        font-family: "Creepster", Impact, sans-serif;
+        font-size: 100px;
+        line-height: 1;
+        margin: 8px 0 4px;
+        color: var(--red3);
+        text-align: center;
+      }
+      .score small {
+        font-size: 34px;
+        color: var(--mute);
+      }
+      .verdict {
+        border: 1px solid var(--red3);
+        border-radius: var(--r);
+        background: var(--card3);
+        padding: 18px 14px;
+        text-align: center;
+        margin: 16px 0;
+      }
+      .verdict .big {
+        font-family: "Creepster", Impact, sans-serif;
+        font-size: 38px;
+        letter-spacing: 0.05em;
+      }
+      .verdict .sub {
+        margin-top: 4px;
+        color: var(--red3);
+        font-size: 22px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      .verdict .hint {
+        margin-top: 6px;
+        color: var(--mute);
+        font-size: 14px;
+      }
+      .code {
+        font-family: "Special Elite", "Courier New", monospace;
+        color: var(--mute);
+        font-size: 14px;
+        text-align: center;
+        margin-top: 12px;
+        line-height: 1.6;
+      }
+      .dead {
+        text-align: center;
+        padding-top: 6px;
+      }
+      .dead .word {
+        font-family: "Nosifer", "Creepster", Impact, sans-serif;
+        font-size: clamp(40px, 15vw, 66px);
+        line-height: 1.1;
+        color: var(--red3);
+        text-shadow:
+          3px 0 #000,
+          -3px 0 #5d0710;
+        animation: shake 0.5s steps(2) infinite;
+      }
+      @keyframes shake {
+        0% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(-3px, 2px);
+        }
+        50% {
+          transform: translate(3px, -2px);
+        }
+        75% {
+          transform: translate(-2px, -1px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      #flash {
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        background: #c1111f;
+        pointer-events: none;
+        opacity: 0;
+        animation: fl 1.6s linear 1 both;
+      }
+      @keyframes fl {
+        0% {
+          opacity: 0.95;
+        }
+        10% {
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.85;
+        }
+        30% {
+          opacity: 0;
+        }
+        42% {
+          opacity: 0.7;
+        }
+        54% {
+          opacity: 0;
+        }
+        66% {
+          opacity: 0.4;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .foot {
+        font-family: "Special Elite", "Courier New", monospace;
+        font-size: 13px;
+        color: var(--mute);
+        text-align: center;
+        margin-top: 26px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .fog,
+        .vig,
+        .screen,
+        .term i,
+        .w1,
+        .w2,
+        .w3,
+        .eye,
+        .wave i,
+        .qh > span:first-child::before,
+        .dead .word,
+        #flash {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="fog a"></div>
+    <div class="fog b"></div>
+    <div class="vig"></div>
+    <div class="wrap">
+      <svg class="scene" viewBox="0 0 520 150" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3a0a12" />
+            <stop offset="1" stop-color="#1a0709" />
+          </linearGradient>
+          <radialGradient id="mg">
+            <stop offset="0" stop-color="#e0283a" stop-opacity=".55" />
+            <stop offset="1" stop-color="#e0283a" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="gr" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#150709" stop-opacity="0" />
+            <stop offset="1" stop-color="#150709" />
+          </linearGradient>
+        </defs>
+        <rect width="520" height="150" fill="url(#sky)" />
+        <circle cx="410" cy="48" r="56" fill="url(#mg)" />
+        <circle cx="410" cy="48" r="26" fill="#d8c2bc" opacity=".75" />
+        <circle cx="401" cy="42" r="5" fill="#b29a95" opacity=".6" />
+        <circle cx="418" cy="56" r="3" fill="#b29a95" opacity=".6" />
+        <path
+          d="M330 28q5-7 10 0q5-7 10 0M360 16q4-6 8 0q4-6 8 0M300 44q4-5 8 0q4-5 8 0"
+          fill="none"
+          stroke="#080204"
+          stroke-width="2"
+        />
+        <path
+          fill="#070204"
+          d="M140 150V86h18V66l12-22 12 22v14h28V62l24-34 24 34v18h28V66l12-22 12 22v20h18v64Z"
+        />
+        <rect class="w1" x="166" y="92" width="8" height="12" fill="#e0283a" />
+        <rect class="w2" x="258" y="86" width="10" height="14" fill="#f06a4a" />
+        <rect class="w3" x="338" y="92" width="8" height="12" fill="#e0283a" />
+        <rect x="256" y="118" width="14" height="32" rx="7" fill="#1a0709" />
+        <g stroke="#070204" stroke-linecap="round" fill="none">
+          <path stroke-width="6" d="M52 150C54 120 50 98 46 70" />
+          <path
+            stroke-width="3"
+            d="M50 100L28 82M49 88L70 66M48 78L34 56M51 112L78 100M46 70L38 46M46 70L58 50"
+          />
+          <path stroke-width="6" d="M476 150C474 124 480 100 484 78" />
+          <path
+            stroke-width="3"
+            d="M481 104L500 88M483 90L462 70M484 78L496 54M480 112L456 102M484 78L474 52"
+          />
+        </g>
+        <g class="eye" fill="#ff3040">
+          <ellipse cx="48" cy="114" rx="3" ry="1.6" />
+          <ellipse cx="57" cy="114" rx="3" ry="1.6" />
+        </g>
+        <path
+          fill="#070204"
+          d="M0 144C80 138 140 148 220 142S400 146 520 140V150H0Z"
+        />
+        <rect y="100" width="520" height="50" fill="url(#gr)" />
+      </svg>
+      <div class="term">
+        <b>shellmates@raccoon-city</b>:~$ ./survive <i></i>
+      </div>
+      <main id="app"></main>
+      <div class="foot">/* Where there is a shell, there is a way */</div>
+    </div>
+    <script>
+      (function () {
+        var ROUNDS = 10;
+        /* GAME INDEX: 0 RE1 Remake, 1 RE2 Remake, 2 RE3 Remake, 3 RE4 Remake, 4 RE5, 5 RE7, 6 Village, 7 Requiem (RE9), 8 RE6 */
+        var GAMES = [
+          "Resident Evil (Remake)",
+          "Resident Evil 2 Remake",
+          "Resident Evil 3 Remake",
+          "Resident Evil 4 Remake",
+          "Resident Evil 5",
+          "Resident Evil 7",
+          "Resident Evil Village",
+          "Resident Evil Requiem",
+          "Resident Evil 6",
+        ];
+        /* Characters and the games they appear in (decoys only come from the games shown in the round) */
+        var CH = {
+          Leon: [1, 3, 7, 8],
+          Ada: [1, 3, 8],
+          Helena: [8],
+          Jill: [0, 2, 4],
+          Wesker: [0, 3, 4],
+          Claire: [1],
+          Chris: [0, 4, 6, 8],
+          Barry: [0],
+          Rebecca: [0],
+          Nemesis: [2],
+          Carlos: [2],
+          Ashley: [3],
+          "The Merchant": [3],
+          Luis: [3],
+          Salazar: [3],
+          Saddler: [3],
+          Sherry: [1],
+          Sheva: [4],
+          Excella: [4],
+          "Jack Baker": [5],
+          Ethan: [5, 6],
+          Mia: [5, 6],
+          "Lady Dimitrescu": [6],
+          Heisenberg: [6],
+          "Mother Miranda": [6],
+          "The Duke": [6],
+        };
+        /* Add or edit quotes: {q:"line", who:"name from CH", game:index}. who and game can be arrays when a line exists in several games/characters. */
+        var QUOTES = [
+          { q: "Ada, wait!", who: "Leon", game: 1 },
+          { q: "This is getting old... saving your ass.", who: "Ada", game: 1 },
+          { q: "I have to find my brother.", who: "Claire", game: 1 },
+          { q: "Ada. Ada Wong.", who: "Ada", game: 1 },
+          { q: "Do you need help?", who: "Claire", game: 1 },
+          { q: "We're here for the G-virus.", who: "Ada", game: 1 },
+          { q: "Enough with this cat and mouse game.", who: "Ada", game: 1 },
+          {
+            q: "Bet he's not part of the rescue squad.",
+            who: "Claire",
+            game: 1,
+          },
+          { q: "Didn't realize we were keeping score.", who: "Ada", game: 1 },
+          {
+            q: "Do yourself a favor: stop asking questions and get the hell out of here.",
+            who: "Ada",
+            game: 1,
+          },
+          { q: "Look, this isn't a game!", who: "Ada", game: 1 },
+          { q: "Nothing dies down here.", who: "Ada", game: 1 },
+          {
+            q: "Helping people like them is why I joined the force.",
+            who: "Leon",
+            game: 1,
+          },
+          {
+            q: "Hope I don't have to write a report on this.",
+            who: "Leon",
+            game: 1,
+          },
+          { q: "Something tells me he's not a cop.", who: "Leon", game: 1 },
+          { q: "Where's everyone going? Bingo?", who: "Leon", game: 3 },
+          { q: "No thanks, bro.", who: "Leon", game: 3 },
+          { q: "Your right hand comes off?", who: "Leon", game: 3 },
+          {
+            q: "September 30th, 1998. It's a day I'll never forget.",
+            who: "Leon",
+            game: 3,
+          },
+          {
+            q: "I think we both know this is where we go our separate ways.",
+            who: "Leon",
+            game: 3,
+          },
+          { q: "Who the hell are you?", who: "Leon", game: 3 },
+          { q: "Sorry, you're not my type.", who: "Leon", game: 3 },
+          { q: "Feels like a million bucks.", who: "Leon", game: [3, 7] },
+          { q: "What're ya buyin'?", who: "The Merchant", game: 3 },
+          { q: "Heh heh heh... Thank you!", who: "The Merchant", game: 3 },
+          {
+            q: "Got a selection of good things on sale, stranger!",
+            who: "The Merchant",
+            game: 3,
+          },
+          { q: "Welcome!", who: "The Merchant", game: 3 },
+          {
+            q: "Stranger, stranger! Now that's a weapon.",
+            who: "The Merchant",
+            game: 3,
+          },
+          { q: "Leon, help!", who: "Ashley", game: 3 },
+          { q: "Leon!", who: "Ashley", game: 3 },
+          { q: "I've been better.", who: "Ada", game: 3 },
+          { q: "Don't think too hard, handsome.", who: "Ada", game: 3 },
+          {
+            q: "Oh Leon. You know I don't work and tell.",
+            who: "Ada",
+            game: 3,
+          },
+          { q: "Until next time, Leon.", who: "Ada", game: 3 },
+          { q: "People can change, right, Leon?", who: "Luis", game: 3 },
+          { q: "S.T.A.R.S.!", who: "Nemesis", game: 2 },
+          {
+            q: "You want S.T.A.R.S.? I'll give you S.T.A.R.S.!",
+            who: "Jill",
+            game: 2,
+          },
+          {
+            q: "What kind of sci-fi bullshit is this?",
+            who: "Carlos",
+            game: 2,
+          },
+          { q: "Now here's a weird fucking door.", who: "Carlos", game: 2 },
+          { q: "You were almost a Jill sandwich!", who: "Barry", game: 0 },
+          { q: "Complete global saturation.", who: "Wesker", game: 4 },
+          { q: "Chriiiis!", who: "Wesker", game: 4 },
+          {
+            q: "Seven minutes. Seven minutes is all I can spare to play with you.",
+            who: "Wesker",
+            game: 4,
+          },
+          { q: "Welcome to the family, son!", who: "Jack Baker", game: 5 },
+          { q: "I see. Better get a move on.", who: "Jack Baker", game: 5 },
+          { q: "Goodbye, Rosemary.", who: "Ethan", game: 6 },
+          {
+            q: "Hey, Lieutenant Branagh. Kennedy... reporting for duty.",
+            who: "Leon",
+            game: 7,
+          },
+          { q: "Well, that's my cardio for the week.", who: "Leon", game: 7 },
+          { q: "'Scuse me.", who: "Leon", game: 7 },
+          { q: "Sorry, but I'm not on the menu.", who: "Leon", game: 7 },
+          {
+            q: "You know, I do have a question. When was the last time you brushed your teeth?",
+            who: "Leon",
+            game: 7,
+          },
+          {
+            q: "I was just resting my eyes.",
+            who: ["Leon", "Ada"],
+            game: [7, 8],
+          },
+          {
+            q: "She's more than just a friend, isn't she?",
+            who: "Helena",
+            game: 8,
+          },
+          { q: "Shouldn't sleep on the job.", who: "Leon", game: 8 },
+        ];
+        var CLAW =
+          '<svg class="claw" viewBox="0 0 70 70"><g stroke="#e0283a" stroke-width="3" stroke-linecap="round" fill="none"><path d="M30 0Q40 28 22 70"/><path d="M46 0Q56 28 38 70"/><path d="M62 0Q72 28 54 70"/></g></svg>';
+        var SKULL =
+          '<svg class="icon" viewBox="0 0 120 120"><defs><radialGradient id="bone" cx="50%" cy="30%" r="75%"><stop offset="0" stop-color="#f6ecec"/><stop offset="1" stop-color="#9c8a8a"/></radialGradient></defs><path d="M60 6C31 6 14 27 14 52c0 14 6 24 15 30v9c0 4 3 7 7 7h48c4 0 7-3 7-7v-9c9-6 15-16 15-30C106 27 89 6 60 6Z" fill="url(#bone)"/><path d="M60 6L55 21L63 30L56 44L61 50" stroke="#4a0a12" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M24 50Q24 36 40 36Q56 39 53 57Q50 70 37 68Q24 66 24 50Z" fill="#12040a"/><path d="M96 50Q96 36 80 36Q64 39 67 57Q70 70 83 68Q96 66 96 50Z" fill="#12040a"/><circle cx="40" cy="53" r="5" fill="#ff3040"/><circle cx="80" cy="53" r="5" fill="#ff3040"/><circle cx="40" cy="53" r="9" fill="#ff3040" opacity=".25"/><circle cx="80" cy="53" r="9" fill="#ff3040" opacity=".25"/><path d="M31 66h5v18a2.5 2.5 0 0 1-5 0Z M84 68h5v28a2.5 2.5 0 0 1-5 0Z" fill="#c1111f"/><path d="M60 64L52 80Q60 84 68 80Z" fill="#12040a"/><path d="M36 91h48v9a4 4 0 0 1-4 4H40a4 4 0 0 1-4-4Z" fill="#efe2e2"/><path d="M45 91v13M53 91v13M60 91v13M67 91v13M75 91v13" stroke="#4a0a12" stroke-width="1.8"/></svg>';
+        var KEY =
+          '<svg class="icon" viewBox="0 0 100 100"><g fill="none" stroke="#e0283a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="30" cy="34" r="16"/><circle cx="30" cy="34" r="5"/><path d="M42 46L84 88M68 72l10-10M76 80l10-10"/></g></svg>';
+        function fmt(n) {
+          return n % 1 === 0 ? String(n) : n.toFixed(1);
+        }
+        var app = document.getElementById("app");
+        function shuffle(a) {
+          a = a.slice();
+          for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = a[i];
+            a[i] = a[j];
+            a[j] = t;
+          }
+          return a;
+        }
+        function esc(s) {
+          return String(s).replace(/[&<>"]/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+          });
+        }
+        var S;
+        function intro() {
+          app.innerHTML =
+            '<section class="screen"><h1>Who said it?<small>Resident Evil</small></h1><div class="rule"></div>' +
+            "<p>Raccoon City needs survivors. Match each line to the character and the game it came from.</p>" +
+            '<div class="panel"><h3>Mission</h3><ul><li>10 rounds, 10 random quotes</li><li>Pick the character and the game, then lock in</li><li>Each correct answer is worth 0.5 point</li></ul></div>' +
+            '<div class="panel"><h3>Rewards (real tokens)</h3><div class="tiers"><div class="tier"><strong>8+</strong>points<span>1 token</span></div><div class="tier"><strong>10</strong>points<span>2 tokens</span></div></div><p style="margin:12px 0 0;font-size:15px;color:var(--mute)">Show your final screen to a Shellmates staff member.</p></div>' +
+            '<button class="btn" id="go">Start</button></section>';
+          document.getElementById("go").onclick = start;
+        }
+        function start() {
+          S = { qs: shuffle(QUOTES).slice(0, ROUNDS), i: 0, score: 0 };
+          round();
+        }
+        function pick(a) {
+          return a[Math.floor(Math.random() * a.length)];
+        }
+        function round() {
+          var r = S.qs[S.i],
+            wh = [].concat(r.who),
+            gm = [].concat(r.game);
+          var og = shuffle(
+            GAMES.map(function (g, k) {
+              return k;
+            }).filter(function (k) {
+              return gm.indexOf(k) < 0;
+            }),
+          ).slice(0, 3);
+          S.gOpts = shuffle(og.concat(pick(gm)));
+          var names = Object.keys(CH).filter(function (n) {
+            return (
+              wh.indexOf(n) < 0 &&
+              CH[n].some(function (g) {
+                return S.gOpts.indexOf(g) > -1;
+              })
+            );
+          });
+          S.cOpts = shuffle(shuffle(names).slice(0, 3).concat(pick(wh)));
+          S.pc = null;
+          S.pg = null;
+          var h = '<section class="screen"><div class="prog">';
+          for (var k = 0; k < ROUNDS; k++)
+            h +=
+              '<i class="' + (k < S.i ? "d" : k === S.i ? "c" : "") + '"></i>';
+          h +=
+            '</div><div class="meta"><span>Round <b>' +
+            (S.i + 1) +
+            "</b> / " +
+            ROUNDS +
+            "</span><span>Survive</span></div>";
+          h +=
+            '<div class="quote"><div class="qh"><span>Recovered transmission</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span></div><div class="qb"><span class="qm">&ldquo;</span>' +
+            esc(r.q) +
+            '<span class="qm">&rdquo;</span></div></div>';
+          h +=
+            '<div class="step">Who said it?</div><div class="grid" id="gc">' +
+            S.cOpts
+              .map(function (c, k) {
+                return (
+                  '<button class="opt" data-k="' +
+                  k +
+                  '">' +
+                  esc(c) +
+                  "</button>"
+                );
+              })
+              .join("") +
+            "</div>";
+          h +=
+            '<div class="step">Which game?</div><div class="grid" id="gg">' +
+            S.gOpts
+              .map(function (g, k) {
+                return (
+                  '<button class="opt" data-k="' +
+                  k +
+                  '">' +
+                  esc(GAMES[g]) +
+                  "</button>"
+                );
+              })
+              .join("") +
+            "</div>";
+          h +=
+            '<button class="btn" id="lock" disabled>' +
+            (S.i === ROUNDS - 1 ? "Finish" : "Lock answer") +
+            "</button></section>";
+          app.innerHTML = h;
+          window.scrollTo(0, 0);
+          bind("gc", function (k) {
+            S.pc = S.cOpts[k];
+          });
+          bind("gg", function (k) {
+            S.pg = S.gOpts[k];
+          });
+          document.getElementById("lock").onclick = lock;
+        }
+        function bind(id, set) {
+          var box = document.getElementById(id),
+            bs = box.querySelectorAll(".opt");
+          box.onclick = function (e) {
+            var b = e.target.closest(".opt");
+            if (!b) return;
+            for (var n = 0; n < bs.length; n++) bs[n].classList.remove("sel");
+            b.classList.add("sel");
+            set(+b.getAttribute("data-k"));
+            document.getElementById("lock").disabled =
+              S.pc === null || S.pg === null;
+          };
+        }
+        function lock() {
+          var r = S.qs[S.i];
+          S.score +=
+            ([].concat(r.who).indexOf(S.pc) > -1 ? 0.5 : 0) +
+            ([].concat(r.game).indexOf(S.pg) > -1 ? 0.5 : 0);
+          S.i++;
+          if (S.i >= ROUNDS) finish();
+          else round();
+        }
+        function finish() {
+          var sc = S.score,
+            tk = sc >= 10 ? 2 : sc >= 8 ? 1 : 0;
+          var d = new Date();
+          var code =
+            "SM-" +
+            Math.random().toString(36).slice(2, 6).toUpperCase() +
+            "-" +
+            String(d.getHours()).padStart(2, "0") +
+            String(d.getMinutes()).padStart(2, "0") +
+            String(d.getSeconds()).padStart(2, "0");
+          var info =
+            '<div class="code">' +
+            code +
+            "<br>" +
+            esc(d.toLocaleString()) +
+            "</div>";
+          if (tk === 0) {
+            var word = Math.random() < 0.5 ? "You are dead" : "Infected";
+            document.body.classList.add("lost");
+            app.innerHTML =
+              '<div id="flash"></div><section class="screen dead">' +
+              SKULL +
+              '<div class="word">' +
+              word +
+              "</div>" +
+              '<div class="score">' +
+              fmt(sc) +
+              "<small> / 10</small></div>" +
+              '<div class="verdict"><div class="big">No token this time</div><div class="hint">8 points for 1 token, 10 for 2</div></div>' +
+              info +
+              "</section>";
+            if (navigator.vibrate) {
+              try {
+                navigator.vibrate([200, 80, 200, 80, 400]);
+              } catch (x) {}
+            }
+          } else {
+            var big = tk === 2 ? "Perfect survivor" : "You made it out";
+            app.innerHTML =
+              '<section class="screen">' +
+              KEY +
+              '<div class="score">' +
+              fmt(sc) +
+              "<small> / 10</small></div>" +
+              '<div class="verdict"><div class="big">' +
+              big +
+              '</div><div class="sub">' +
+              (tk === 2 ? "2 tokens" : "1 token") +
+              '</div><div class="hint">Show this screen to a staff member</div></div>' +
+              info +
+              "</section>";
+          }
+          window.scrollTo(0, 0);
+        }
+        intro();
+      })();
+    </script>
+  </body>
+</html>
