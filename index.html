@@ -32,6 +32,8 @@
       html {
         scroll-padding-top: env(safe-area-inset-top, 0px);
         -webkit-text-size-adjust: 100%;
+        overflow-x: hidden;
+        max-width: 100%;
       }
       *,
       *::before,
@@ -151,8 +153,10 @@
         position: relative;
         z-index: 1;
         max-width: 480px;
+        width: 100%;
         margin: 0 auto;
         padding: 0 18px 30px;
+        overflow-x: clip;
       }
       .scene {
         display: block;
@@ -522,6 +526,10 @@
         width: 96px;
         height: 96px;
       }
+      .word span {
+        display: inline-block;
+        white-space: nowrap;
+      }
       .score {
         font-family: "Creepster", Impact, sans-serif;
         font-size: 100px;
@@ -571,11 +579,15 @@
       .dead {
         text-align: center;
         padding-top: 6px;
+        max-width: 100%;
+        overflow: hidden;
       }
       .dead .word {
         font-family: "Nosifer", "Creepster", Impact, sans-serif;
-        font-size: clamp(40px, 15vw, 66px);
-        line-height: 1.1;
+        font-size: 48px; /* real size is fitted to the screen by JS */
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        line-height: 1.15;
         color: var(--red3);
         text-shadow:
           3px 0 #000,
@@ -1035,6 +1047,25 @@
           if (S.i >= ROUNDS) finish();
           else round();
         }
+        function fit() {
+          var w = document.querySelector(".dead .word");
+          if (!w) return;
+          var max = w.parentNode.clientWidth - 8,
+            size = Math.min(66, window.innerWidth * 0.15),
+            spans = w.querySelectorAll("span");
+          w.style.fontSize = size + "px";
+          var n = 0;
+          while (n++ < 40 && size > 16) {
+            var widest = 0;
+            for (var i = 0; i < spans.length; i++)
+              widest = Math.max(widest, spans[i].offsetWidth);
+            if (widest <= max) break;
+            size -= 2;
+            w.style.fontSize = size + "px";
+          }
+        }
+        window.addEventListener("resize", fit);
+        window.addEventListener("orientationchange", fit);
         function finish() {
           var sc = S.score,
             tk = sc >= 10 ? 2 : sc >= 8 ? 1 : 0;
@@ -1059,7 +1090,12 @@
               '<div id="flash"></div><section class="screen dead">' +
               SKULL +
               '<div class="word">' +
-              word +
+              word
+                .split(" ")
+                .map(function (w) {
+                  return "<span>" + w + "</span>";
+                })
+                .join(" ") +
               "</div>" +
               '<div class="score">' +
               fmt(sc) +
@@ -1067,6 +1103,9 @@
               '<div class="verdict"><div class="big">No token this time</div><div class="hint">8 points for 1 token, 10 for 2</div></div>' +
               info +
               "</section>";
+            fit();
+            if (document.fonts && document.fonts.ready)
+              document.fonts.ready.then(fit);
             if (navigator.vibrate) {
               try {
                 navigator.vibrate([200, 80, 200, 80, 400]);
