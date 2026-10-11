@@ -227,7 +227,8 @@
       h1 {
         font-family: "Nosifer", "Creepster", Impact, sans-serif;
         font-weight: 400;
-        font-size: 34px;
+        font-size: clamp(24px, 8.5vw, 34px);
+        overflow-wrap: anywhere;
         line-height: 1.25;
         margin: 2px 0 6px;
         text-transform: uppercase;
@@ -653,6 +654,112 @@
         text-align: center;
         margin-top: 26px;
       }
+      .field {
+        margin: 14px 0 0;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--mute);
+      }
+      .field input {
+        display: block;
+        width: 100%;
+        min-height: 58px;
+        padding: 10px 14px;
+        background: var(--card);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        font:
+          400 20px "Special Elite",
+          "Courier New",
+          monospace;
+        outline: 0;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+      .field input::placeholder {
+        color: #6e575a;
+      }
+      .field input:focus {
+        border-color: var(--red3);
+        box-shadow: 0 0 0 3px rgba(224, 40, 58, 0.28);
+      }
+      .btn.ghost {
+        background: transparent;
+        border-color: var(--line);
+        color: var(--ink);
+        margin-top: 10px;
+      }
+      .tag {
+        font-weight: 600;
+      }
+      .tag.t1 {
+        color: #c9b6b6;
+      }
+      .tag.t2 {
+        color: #f06a4a;
+      }
+      .tag.t3 {
+        color: var(--red3);
+        animation: blink 1.2s steps(1) infinite;
+      }
+      .board {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .board li {
+        display: grid;
+        grid-template-columns: 30px minmax(0, 1fr) auto auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 0;
+        border-top: 1px solid var(--line);
+        font-size: 18px;
+        color: #ecdcdc;
+      }
+      .board li:first-child {
+        border-top: 0;
+      }
+      .board .rk {
+        font-family: "Creepster", Impact, sans-serif;
+        font-size: 24px;
+        color: var(--mute);
+        text-align: center;
+      }
+      .board li:nth-child(-n + 3) .rk {
+        color: var(--red3);
+      }
+      .board .nm {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .board .sc {
+        font-family: "Creepster", Impact, sans-serif;
+        font-size: 26px;
+        letter-spacing: 0.04em;
+        color: var(--ink);
+      }
+      .board .tm {
+        font-family: "Special Elite", "Courier New", monospace;
+        font-size: 13px;
+        color: var(--mute);
+      }
+      .board li.me {
+        background: rgba(224, 40, 58, 0.14);
+        margin: 0 -10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 10px;
+        border-top-color: transparent;
+      }
       @media (prefers-reduced-motion: reduce) {
         .fog,
         .vig,
@@ -665,6 +772,7 @@
         .wave i,
         .qh > span:first-child::before,
         .dead .word,
+        .tag.t3,
         #flash {
           animation: none;
         }
@@ -783,127 +891,113 @@
           "Mother Miranda": [6],
           "The Duke": [6],
         };
-        /* Add or edit quotes: {q:"line", who:"name from CH", game:index}. who and game can be arrays when a line exists in several games/characters. */
+        /* Quotes: Q(difficulty 1 easy / 2 medium / 3 hard, line, who (name from CH), game index). who and game can be arrays. */
+        function Q(d, q, who, game) {
+          return { d: d, q: q, who: who, game: game };
+        }
         var QUOTES = [
-          { q: "Ada, wait!", who: "Leon", game: 1 },
-          { q: "This is getting old... saving your ass.", who: "Ada", game: 1 },
-          { q: "I have to find my brother.", who: "Claire", game: 1 },
-          { q: "Ada. Ada Wong.", who: "Ada", game: 1 },
-          { q: "Do you need help?", who: "Claire", game: 1 },
-          { q: "We're here for the G-virus.", who: "Ada", game: 1 },
-          { q: "Enough with this cat and mouse game.", who: "Ada", game: 1 },
-          {
-            q: "Bet he's not part of the rescue squad.",
-            who: "Claire",
-            game: 1,
-          },
-          { q: "Didn't realize we were keeping score.", who: "Ada", game: 1 },
-          {
-            q: "Do yourself a favor: stop asking questions and get the hell out of here.",
-            who: "Ada",
-            game: 1,
-          },
-          { q: "Look, this isn't a game!", who: "Ada", game: 1 },
-          { q: "Nothing dies down here.", who: "Ada", game: 1 },
-          {
-            q: "Helping people like them is why I joined the force.",
-            who: "Leon",
-            game: 1,
-          },
-          {
-            q: "Hope I don't have to write a report on this.",
-            who: "Leon",
-            game: 1,
-          },
-          { q: "Something tells me he's not a cop.", who: "Leon", game: 1 },
-          { q: "Where's everyone going? Bingo?", who: "Leon", game: 3 },
-          { q: "No thanks, bro.", who: "Leon", game: 3 },
-          { q: "Your right hand comes off?", who: "Leon", game: 3 },
-          {
-            q: "September 30th, 1998. It's a day I'll never forget.",
-            who: "Leon",
-            game: 3,
-          },
-          {
-            q: "I think we both know this is where we go our separate ways.",
-            who: "Leon",
-            game: 3,
-          },
-          { q: "Who the hell are you?", who: "Leon", game: 3 },
-          { q: "Sorry, you're not my type.", who: "Leon", game: 3 },
-          { q: "Feels like a million bucks.", who: "Leon", game: [3, 7] },
-          { q: "What're ya buyin'?", who: "The Merchant", game: 3 },
-          { q: "Heh heh heh... Thank you!", who: "The Merchant", game: 3 },
-          {
-            q: "Got a selection of good things on sale, stranger!",
-            who: "The Merchant",
-            game: 3,
-          },
-          { q: "Welcome!", who: "The Merchant", game: 3 },
-          {
-            q: "Stranger, stranger! Now that's a weapon.",
-            who: "The Merchant",
-            game: 3,
-          },
-          { q: "Leon, help!", who: "Ashley", game: 3 },
-          { q: "Leon!", who: "Ashley", game: 3 },
-          { q: "I've been better.", who: "Ada", game: 3 },
-          { q: "Don't think too hard, handsome.", who: "Ada", game: 3 },
-          {
-            q: "Oh Leon. You know I don't work and tell.",
-            who: "Ada",
-            game: 3,
-          },
-          { q: "Until next time, Leon.", who: "Ada", game: 3 },
-          { q: "People can change, right, Leon?", who: "Luis", game: 3 },
-          { q: "S.T.A.R.S.!", who: "Nemesis", game: 2 },
-          {
-            q: "You want S.T.A.R.S.? I'll give you S.T.A.R.S.!",
-            who: "Jill",
-            game: 2,
-          },
-          {
-            q: "What kind of sci-fi bullshit is this?",
-            who: "Carlos",
-            game: 2,
-          },
-          { q: "Now here's a weird fucking door.", who: "Carlos", game: 2 },
-          { q: "You were almost a Jill sandwich!", who: "Barry", game: 0 },
-          { q: "Complete global saturation.", who: "Wesker", game: 4 },
-          { q: "Chriiiis!", who: "Wesker", game: 4 },
-          {
-            q: "Seven minutes. Seven minutes is all I can spare to play with you.",
-            who: "Wesker",
-            game: 4,
-          },
-          { q: "Welcome to the family, son!", who: "Jack Baker", game: 5 },
-          { q: "I see. Better get a move on.", who: "Jack Baker", game: 5 },
-          { q: "Goodbye, Rosemary.", who: "Ethan", game: 6 },
-          {
-            q: "Hey, Lieutenant Branagh. Kennedy... reporting for duty.",
-            who: "Leon",
-            game: 7,
-          },
-          { q: "Well, that's my cardio for the week.", who: "Leon", game: 7 },
-          { q: "'Scuse me.", who: "Leon", game: 7 },
-          { q: "Sorry, but I'm not on the menu.", who: "Leon", game: 7 },
-          {
-            q: "You know, I do have a question. When was the last time you brushed your teeth?",
-            who: "Leon",
-            game: 7,
-          },
-          {
-            q: "I was just resting my eyes.",
-            who: ["Leon", "Ada"],
-            game: [7, 8],
-          },
-          {
-            q: "She's more than just a friend, isn't she?",
-            who: "Helena",
-            game: 8,
-          },
-          { q: "Shouldn't sleep on the job.", who: "Leon", game: 8 },
+          Q(1, "Ada, wait!", "Leon", 1),
+          Q(1, "I have to find my brother.", "Claire", 1),
+          Q(1, "Ada. Ada Wong.", "Ada", 1),
+          Q(1, "What're ya buyin'?", "The Merchant", 3),
+          Q(1, "Heh heh heh... Thank you!", "The Merchant", 3),
+          Q(1, "Stranger, stranger! Now that's a weapon.", "The Merchant", 3),
+          Q(1, "Leon, help!", "Ashley", 3),
+          Q(1, "Where's everyone going? Bingo?", "Leon", 3),
+          Q(1, "No thanks, bro.", "Leon", 3),
+          Q(1, "S.T.A.R.S.!", "Nemesis", 2),
+          Q(1, "You want S.T.A.R.S.? I'll give you S.T.A.R.S.!", "Jill", 2),
+          Q(1, "You were almost a Jill sandwich!", "Barry", 0),
+          Q(1, "Chriiiis!", "Wesker", 4),
+          Q(1, "Welcome to the family, son!", "Jack Baker", 5),
+          Q(2, "Welcome!", "The Merchant", 3),
+          Q(
+            2,
+            "Got a selection of good things on sale, stranger!",
+            "The Merchant",
+            3,
+          ),
+          Q(2, "Leon!", "Ashley", 3),
+          Q(2, "Your right hand comes off?", "Leon", 3),
+          Q(2, "Sorry, you're not my type.", "Leon", 3),
+          Q(
+            2,
+            "September 30th, 1998. It's a day I'll never forget.",
+            "Leon",
+            3,
+          ),
+          Q(
+            2,
+            "I think we both know this is where we go our separate ways.",
+            "Leon",
+            3,
+          ),
+          Q(2, "Don't think too hard, handsome.", "Ada", 3),
+          Q(2, "Oh Leon. You know I don't work and tell.", "Ada", 3),
+          Q(2, "Until next time, Leon.", "Ada", 3),
+          Q(2, "People can change, right, Leon?", "Luis", 3),
+          Q(2, "Complete global saturation.", "Wesker", 4),
+          Q(
+            2,
+            "Seven minutes. Seven minutes is all I can spare to play with you.",
+            "Wesker",
+            4,
+          ),
+          Q(2, "What kind of sci-fi bullshit is this?", "Carlos", 2),
+          Q(2, "Now here's a weird fucking door.", "Carlos", 2),
+          Q(2, "We're here for the G-virus.", "Ada", 1),
+          Q(2, "Do you need help?", "Claire", 1),
+          Q(
+            2,
+            "Helping people like them is why I joined the force.",
+            "Leon",
+            1,
+          ),
+          Q(2, "Hope I don't have to write a report on this.", "Leon", 1),
+          Q(2, "Goodbye, Rosemary.", "Ethan", 6),
+          Q(
+            2,
+            "You know, I do have a question. When was the last time you brushed your teeth?",
+            "Leon",
+            7,
+          ),
+          Q(3, "This is getting old... saving your ass.", "Ada", 1),
+          Q(3, "Enough with this cat and mouse game.", "Ada", 1),
+          Q(3, "Bet he's not part of the rescue squad.", "Claire", 1),
+          Q(3, "Didn't realize we were keeping score.", "Ada", 1),
+          Q(
+            3,
+            "Do yourself a favor: stop asking questions and get the hell out of here.",
+            "Ada",
+            1,
+          ),
+          Q(3, "Look, this isn't a game!", "Ada", 1),
+          Q(3, "Nothing dies down here.", "Ada", 1),
+          Q(3, "Something tells me he's not a cop.", "Leon", 1),
+          Q(3, "Who the hell are you?", "Leon", 3),
+          Q(3, "I've been better.", "Ada", 3),
+          Q(3, "Feels like a million bucks.", "Leon", [3, 7]),
+          Q(3, "I see. Better get a move on.", "Jack Baker", 5),
+          Q(
+            3,
+            "Hey, Lieutenant Branagh. Kennedy... reporting for duty.",
+            "Leon",
+            7,
+          ),
+          Q(3, "Well, that's my cardio for the week.", "Leon", 7),
+          Q(3, "'Scuse me.", "Leon", 7),
+          Q(3, "Sorry, but I'm not on the menu.", "Leon", 7),
+          Q(3, "I was just resting my eyes.", ["Leon", "Ada"], [7, 8]),
+          Q(3, "She's more than just a friend, isn't she?", "Helena", 8),
+          Q(3, "Shouldn't sleep on the job.", "Leon", 8),
         ];
+        /* Difficulty plan: rounds 1-3 easy, 4-7 medium, 8-10 hard. Hard rounds show 6 options and confusable decoys. */
+        var PLAN = [1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
+        var LV = {
+          1: { n: 4, tag: "Rookie" },
+          2: { n: 4, tag: "Veteran" },
+          3: { n: 6, tag: "Nightmare" },
+        };
         var CLAW =
           '<svg class="claw" viewBox="0 0 70 70"><g stroke="#e0283a" stroke-width="3" stroke-linecap="round" fill="none"><path d="M30 0Q40 28 22 70"/><path d="M46 0Q56 28 38 70"/><path d="M62 0Q72 28 54 70"/></g></svg>';
         var SKULL =
@@ -930,17 +1024,247 @@
           });
         }
         var S;
+        var KEY_B = "shellmates_re_board_v1",
+          KEY_N = "shellmates_re_name";
+        function ld(k, d) {
+          try {
+            var v = localStorage.getItem(k);
+            return v ? JSON.parse(v) : d;
+          } catch (e) {
+            return d;
+          }
+        }
+        function sv(k, v) {
+          try {
+            localStorage.setItem(k, JSON.stringify(v));
+          } catch (e) {}
+        }
+        function clean(v) {
+          return String(v || "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 14);
+        }
+        function mmss(t) {
+          return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
+        }
+        var NAME = clean(ld(KEY_N, ""));
+
+        var DB_URL =
+          "https://shellmates-welcome-day-default-rtdb.firebaseio.com/";
+        function rkey(n) {
+          return n.toLowerCase().replace(/[.$#\[\]\/\u0000-\u001f]/g, "_");
+        }
+        function net(path, opt) {
+          return fetch(
+            DB_URL.replace(/\/+$/, "") + "/" + path + ".json",
+            opt,
+          ).then(function (r) {
+            if (!r.ok) throw new Error(r.status);
+            return r.json();
+          });
+        }
+        function remoteAll() {
+          return net("scores").then(function (o) {
+            var a = [];
+            for (var k in o || {}) {
+              var e = o[k];
+              if (
+                e &&
+                e.name &&
+                typeof e.score === "number" &&
+                typeof e.t === "number"
+              )
+                a.push({
+                  name: String(e.name).slice(0, 14),
+                  score: e.score,
+                  t: e.t,
+                });
+            }
+            return a;
+          });
+        }
+        function push(e) {
+          var k = "scores/" + encodeURIComponent(rkey(e.name));
+          return net(k).then(function (old) {
+            if (
+              old &&
+              (old.score > e.score || (old.score === e.score && old.t <= e.t))
+            )
+              return;
+            return net(k, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(e),
+            });
+          });
+        }
+        function sync() {
+          if (!DB_URL) return;
+          var key = S.name.toLowerCase();
+          push({ name: S.name, score: S.score, t: S.t })
+            .then(remoteAll)
+            .then(function (a) {
+              var s2 = sorted(a),
+                r = 0;
+              s2.forEach(function (x, i) {
+                if (x.name.toLowerCase() === key) r = i + 1;
+              });
+              var el = document.getElementById("rk");
+              if (el && r) el.textContent = "#" + r + "/" + s2.length;
+            })
+            .catch(function () {});
+        }
+        function sorted(b) {
+          return b.slice().sort(function (a, c) {
+            return a.score !== c.score ? c.score - a.score : a.t - c.t;
+          });
+        }
+        function record() {
+          var b = ld(KEY_B, []),
+            key = S.name.toLowerCase(),
+            e = { name: S.name, score: S.score, t: S.t },
+            k = -1;
+          b.forEach(function (x, i) {
+            if (x.name.toLowerCase() === key) k = i;
+          });
+          if (k < 0) b.push(e);
+          else if (
+            e.score > b[k].score ||
+            (e.score === b[k].score && e.t < b[k].t)
+          )
+            b[k] = e;
+          sv(KEY_B, b);
+          var s2 = sorted(b),
+            r = 0;
+          s2.forEach(function (x, i) {
+            if (x.name.toLowerCase() === key) r = i + 1;
+          });
+          return { rank: r, total: s2.length };
+        }
+        function show(h) {
+          app.innerHTML = h;
+          window.scrollTo(0, 0);
+          var a = document.getElementById("sb"),
+            b = document.getElementById("nw");
+          if (a)
+            a.onclick = function () {
+              board(S.name, h);
+            };
+          if (b)
+            b.onclick = function () {
+              document.body.classList.remove("lost");
+              intro();
+            };
+          if (h.indexOf('class="word"') > -1) {
+            fit();
+            if (document.fonts && document.fonts.ready)
+              document.fonts.ready.then(fit);
+          }
+        }
+        function board(me, back) {
+          var key = (me || "").toLowerCase();
+          function head(inner, note) {
+            app.innerHTML =
+              '<section class="screen"><h1>Scoreboard<small>Resident Evil</small></h1><div class="rule"></div><div class="panel">' +
+              inner +
+              '</div><p style="font-size:14px;color:var(--mute)">' +
+              note +
+              '</p><button class="btn ghost" id="bk">Back</button></section>';
+            window.scrollTo(0, 0);
+            document.getElementById("bk").onclick = function () {
+              if (back) show(back.replace('<div id="flash"></div>', ""));
+              else intro();
+            };
+          }
+          function draw(list, note) {
+            var rows = sorted(list)
+              .slice(0, 20)
+              .map(function (e, i) {
+                return (
+                  "<li" +
+                  (e.name.toLowerCase() === key ? ' class="me"' : "") +
+                  '><span class="rk">' +
+                  (i + 1) +
+                  '</span><span class="nm">' +
+                  esc(e.name) +
+                  '</span><span class="sc">' +
+                  fmt(e.score) +
+                  '</span><span class="tm">' +
+                  mmss(e.t) +
+                  "</span></li>"
+                );
+              });
+            head(
+              "<h3>Top survivors</h3>" +
+                (rows.length
+                  ? '<ul class="board">' + rows.join("") + "</ul>"
+                  : '<p style="margin:0;color:var(--mute)">No survivors yet. Be the first.</p>'),
+              note,
+            );
+          }
+          var local = ld(KEY_B, []),
+            rule =
+              "Best run per name. Highest score first, fastest time breaks ties.";
+          if (!DB_URL)
+            return draw(local, "Scores from this device only. " + rule);
+          head(
+            '<p style="margin:0;color:var(--mute)">Loading survivors...</p>',
+            "",
+          );
+          remoteAll()
+            .then(function (a) {
+              draw(a, "Live scoreboard. " + rule);
+            })
+            .catch(function () {
+              draw(local, "Offline: showing this device only.");
+            });
+        }
         function intro() {
+          S = null;
           app.innerHTML =
             '<section class="screen"><h1>Who said it?<small>Resident Evil</small></h1><div class="rule"></div>' +
             "<p>Raccoon City needs survivors. Match each line to the character and the game it came from.</p>" +
-            '<div class="panel"><h3>Mission</h3><ul><li>10 rounds, 10 random quotes</li><li>Pick the character and the game, then lock in</li><li>Each correct answer is worth 0.5 point</li></ul></div>' +
+            '<div class="panel"><h3>Mission</h3><ul><li>10 rounds that get harder: Rookie, Veteran, Nightmare</li><li>Pick the character and the game, then lock in</li><li>Each correct answer is worth 0.5 point</li><li>Top the scoreboard: highest score wins, fastest time breaks ties</li></ul></div>' +
             '<div class="panel"><h3>Rewards</h3><div class="tiers"><div class="tier"><strong>8+</strong>points<span>1 token</span></div><div class="tier"><strong>10</strong>points<span>2 tokens</span></div></div><p style="margin:12px 0 0;font-size:15px;color:var(--mute)">Show your final screen to a Shellmates staff member.</p></div>' +
-            '<button class="btn" id="go">Start</button></section>';
-          document.getElementById("go").onclick = start;
+            '<div class="field"><label for="nm">Survivor name</label><input id="nm" maxlength="14" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Enter your name" value="' +
+            esc(NAME) +
+            '"></div>' +
+            '<button class="btn" id="go" disabled>Start</button><button class="btn ghost" id="sb">Scoreboard</button></section>';
+          var nm = document.getElementById("nm"),
+            go = document.getElementById("go");
+          function chk() {
+            go.disabled = !clean(nm.value);
+          }
+          nm.oninput = chk;
+          nm.onkeydown = function (e) {
+            if (e.key === "Enter" && !go.disabled) {
+              nm.blur();
+              start(nm.value);
+            }
+          };
+          go.onclick = function () {
+            start(nm.value);
+          };
+          document.getElementById("sb").onclick = function () {
+            board(NAME, null);
+          };
+          chk();
         }
-        function start() {
-          S = { qs: shuffle(QUOTES).slice(0, ROUNDS), i: 0, score: 0 };
+        function build() {
+          var p = { 1: [], 2: [], 3: [] };
+          QUOTES.forEach(function (q) {
+            p[q.d].push(q);
+          });
+          for (var d = 1; d <= 3; d++) p[d] = shuffle(p[d]);
+          return PLAN.map(function (d) {
+            return p[d].pop() || p[2].pop() || p[1].pop() || p[3].pop();
+          });
+        }
+        function start(v) {
+          NAME = clean(v);
+          sv(KEY_N, NAME);
+          S = { qs: build(), i: 0, score: 0, name: NAME, t0: Date.now() };
           round();
         }
         function pick(a) {
@@ -948,25 +1272,62 @@
         }
         function round() {
           var r = S.qs[S.i],
+            L = LV[r.d],
             wh = [].concat(r.who),
             gm = [].concat(r.game);
-          var og = shuffle(
-            GAMES.map(function (g, k) {
-              return k;
-            }).filter(function (k) {
-              return gm.indexOf(k) < 0;
-            }),
-          ).slice(0, 3);
-          S.gOpts = shuffle(og.concat(pick(gm)));
-          var names = Object.keys(CH).filter(function (n) {
-            return (
-              wh.indexOf(n) < 0 &&
-              CH[n].some(function (g) {
-                return S.gOpts.indexOf(g) > -1;
-              })
-            );
+          function inG(c, gs) {
+            return CH[c].some(function (g) {
+              return gs.indexOf(g) > -1;
+            });
+          }
+          var others = GAMES.map(function (g, k) {
+            return k;
+          }).filter(function (k) {
+            return gm.indexOf(k) < 0;
           });
-          S.cOpts = shuffle(shuffle(names).slice(0, 3).concat(pick(wh)));
+          var gp = shuffle(others);
+          if (r.d === 3) {
+            /* hard: games where the speaker also appears come first */
+            var near = others.filter(function (k) {
+              return wh.some(function (w) {
+                return CH[w].indexOf(k) > -1;
+              });
+            });
+            gp = shuffle(near).concat(
+              shuffle(
+                others.filter(function (k) {
+                  return near.indexOf(k) < 0;
+                }),
+              ),
+            );
+          }
+          S.gOpts = shuffle(gp.slice(0, L.n - 1).concat(pick(gm)));
+          var names = Object.keys(CH).filter(function (c) {
+            return wh.indexOf(c) < 0;
+          });
+          function split(test) {
+            var a = names.filter(test),
+              b = names.filter(function (c) {
+                return !test(c);
+              });
+            return shuffle(a).concat(shuffle(b));
+          }
+          var cp;
+          if (r.d === 1)
+            /* easy: decoys from other games, so the answer stands out */
+            cp = split(function (c) {
+              return !inG(c, gm);
+            });
+          else if (r.d === 3)
+            /* hard: decoys from the same game as the answer */
+            cp = split(function (c) {
+              return inG(c, gm);
+            });
+          else
+            cp = split(function (c) {
+              return inG(c, S.gOpts);
+            });
+          S.cOpts = shuffle(cp.slice(0, L.n - 1).concat(pick(wh)));
           S.pc = null;
           S.pg = null;
           var h = '<section class="screen"><div class="prog">';
@@ -978,7 +1339,11 @@
             (S.i + 1) +
             "</b> / " +
             ROUNDS +
-            "</span><span>Survive</span></div>";
+            '</span><span class="tag t' +
+            r.d +
+            '">' +
+            L.tag +
+            "</span></div>";
           h +=
             '<div class="quote"><div class="qh"><span>Recovered transmission</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span></div><div class="qb"><span class="qm">&ldquo;</span>' +
             esc(r.q) +
@@ -1070,6 +1435,7 @@
           var sc = S.score,
             tk = sc >= 10 ? 2 : sc >= 8 ? 1 : 0;
           var d = new Date();
+          S.t = Math.round((d.getTime() - S.t0) / 1000);
           var code =
             "SM-" +
             Math.random().toString(36).slice(2, 6).toUpperCase() +
@@ -1077,35 +1443,44 @@
             String(d.getHours()).padStart(2, "0") +
             String(d.getMinutes()).padStart(2, "0") +
             String(d.getSeconds()).padStart(2, "0");
+          var rk = record();
           var info =
             '<div class="code">' +
+            esc(S.name) +
+            ' &middot; <span id="rk">#' +
+            rk.rank +
+            "/" +
+            rk.total +
+            "</span>" +
+            "<br>" +
             code +
+            " &middot; " +
+            mmss(S.t) +
             "<br>" +
             esc(d.toLocaleString()) +
-            "</div>";
+            "</div>" +
+            '<button class="btn" id="sb">Scoreboard</button><button class="btn ghost" id="nw">New player</button>';
           if (tk === 0) {
             var word = Math.random() < 0.5 ? "You are dead" : "Infected";
             document.body.classList.add("lost");
-            app.innerHTML =
+            show(
               '<div id="flash"></div><section class="screen dead">' +
-              SKULL +
-              '<div class="word">' +
-              word
-                .split(" ")
-                .map(function (w) {
-                  return "<span>" + w + "</span>";
-                })
-                .join(" ") +
-              "</div>" +
-              '<div class="score">' +
-              fmt(sc) +
-              "<small> / 10</small></div>" +
-              '<div class="verdict"><div class="big">No token this time</div><div class="hint">8 points for 1 token, 10 for 2</div></div>' +
-              info +
-              "</section>";
-            fit();
-            if (document.fonts && document.fonts.ready)
-              document.fonts.ready.then(fit);
+                SKULL +
+                '<div class="word">' +
+                word
+                  .split(" ")
+                  .map(function (w) {
+                    return "<span>" + w + "</span>";
+                  })
+                  .join(" ") +
+                "</div>" +
+                '<div class="score">' +
+                fmt(sc) +
+                "<small> / 10</small></div>" +
+                '<div class="verdict"><div class="big">No token this time</div><div class="hint">8 points for 1 token, 10 for 2</div></div>' +
+                info +
+                "</section>",
+            );
             if (navigator.vibrate) {
               try {
                 navigator.vibrate([200, 80, 200, 80, 400]);
@@ -1113,21 +1488,22 @@
             }
           } else {
             var big = tk === 2 ? "Perfect survivor" : "You made it out";
-            app.innerHTML =
+            show(
               '<section class="screen">' +
-              KEY +
-              '<div class="score">' +
-              fmt(sc) +
-              "<small> / 10</small></div>" +
-              '<div class="verdict"><div class="big">' +
-              big +
-              '</div><div class="sub">' +
-              (tk === 2 ? "2 tokens" : "1 token") +
-              '</div><div class="hint">Show this screen to a staff member</div></div>' +
-              info +
-              "</section>";
+                KEY +
+                '<div class="score">' +
+                fmt(sc) +
+                "<small> / 10</small></div>" +
+                '<div class="verdict"><div class="big">' +
+                big +
+                '</div><div class="sub">' +
+                (tk === 2 ? "2 tokens" : "1 token") +
+                '</div><div class="hint">Show this screen to a staff member</div></div>' +
+                info +
+                "</section>",
+            );
           }
-          window.scrollTo(0, 0);
+          sync();
         }
         intro();
       })();
