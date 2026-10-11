@@ -760,6 +760,68 @@
         border-radius: 10px;
         border-top-color: transparent;
       }
+      .panel h3 small {
+        font-family: "Oswald", system-ui, sans-serif;
+        font-size: 13px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--mute);
+        margin-left: 10px;
+      }
+      .rv {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .rv li {
+        padding: 16px 0;
+        border-top: 1px solid var(--line);
+      }
+      .rv li:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .rv li:last-child {
+        padding-bottom: 0;
+      }
+      .rv .meta {
+        margin-bottom: 8px;
+      }
+      .rv .rq {
+        font-family: "Special Elite", "Courier New", monospace;
+        font-size: 18px;
+        line-height: 1.4;
+        color: #fff;
+        margin: 0 0 10px;
+      }
+      .rv .ra {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr);
+        gap: 10px;
+        padding: 6px 0;
+        font-size: 17px;
+        line-height: 1.3;
+      }
+      .rv .lb {
+        font-size: 13px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--mute);
+        padding-top: 3px;
+      }
+      .rv .ra.ok .av {
+        color: var(--ink);
+      }
+      .rv .ra.bad .av {
+        color: var(--red3);
+      }
+      .rv .av em {
+        display: block;
+        font-style: normal;
+        font-size: 14px;
+        color: var(--mute);
+        margin-top: 2px;
+      }
       @media (prefers-reduced-motion: reduce) {
         .fog,
         .vig,
@@ -1101,17 +1163,13 @@
         }
         function sync() {
           if (!DB_URL) return;
-          var key = S.name.toLowerCase();
-          push({ name: S.name, score: S.score, t: S.t })
+          var nm = S.name;
+          push({ name: nm, score: S.score, t: S.t })
             .then(remoteAll)
             .then(function (a) {
-              var s2 = sorted(a),
-                r = 0;
-              s2.forEach(function (x, i) {
-                if (x.name.toLowerCase() === key) r = i + 1;
-              });
-              var el = document.getElementById("rk");
-              if (el && r) el.textContent = "#" + r + "/" + s2.length;
+              var el = document.getElementById("rk"),
+                t = rankIn(a, nm);
+              if (el && t) el.textContent = t;
             })
             .catch(function () {});
         }
@@ -1119,6 +1177,27 @@
           return b.slice().sort(function (a, c) {
             return a.score !== c.score ? c.score - a.score : a.t - c.t;
           });
+        }
+        function isSurv(e) {
+          return e.score >= 8;
+        }
+        function rankIn(list, name) {
+          var key = name.toLowerCase(),
+            me = null;
+          list.forEach(function (x) {
+            if (x.name.toLowerCase() === key) me = x;
+          });
+          if (!me) return "";
+          var grp = sorted(
+              list.filter(function (x) {
+                return isSurv(x) === isSurv(me);
+              }),
+            ),
+            r = 0;
+          grp.forEach(function (x, i) {
+            if (x.name.toLowerCase() === key) r = i + 1;
+          });
+          return "#" + r + "/" + grp.length + (isSurv(me) ? " survivors" : " dead");
         }
         function record() {
           var b = ld(KEY_B, []),
@@ -1135,18 +1214,18 @@
           )
             b[k] = e;
           sv(KEY_B, b);
-          var s2 = sorted(b),
-            r = 0;
-          s2.forEach(function (x, i) {
-            if (x.name.toLowerCase() === key) r = i + 1;
-          });
-          return { rank: r, total: s2.length };
+          return rankIn(b, S.name);
         }
         function show(h) {
           app.innerHTML = h;
           window.scrollTo(0, 0);
           var a = document.getElementById("sb"),
-            b = document.getElementById("nw");
+            b = document.getElementById("nw"),
+            v = document.getElementById("rv");
+          if (v)
+            v.onclick = function () {
+              review(h);
+            };
           if (a)
             a.onclick = function () {
               board(S.name, h);
@@ -1161,6 +1240,54 @@
             if (document.fonts && document.fonts.ready)
               document.fonts.ready.then(fit);
           }
+        }
+        function review(back) {
+          function row(lb, ok, correct, mine) {
+            return (
+              '<div class="ra ' +
+              (ok ? "ok" : "bad") +
+              '"><span class="lb">' +
+              lb +
+              '</span><span class="av">' +
+              (ok ? "&#10003; " : "&#10007; ") +
+              esc(correct) +
+              (ok ? "" : "<em>You said: " + esc(mine) + "</em>") +
+              "</span></div>"
+            );
+          }
+          var items = (S.log || []).map(function (x, i) {
+            return (
+              '<li><div class="meta"><span>Round <b>' +
+              (i + 1) +
+              '</b></span><span class="tag t' +
+              x.d +
+              '">' +
+              LV[x.d].tag +
+              '</span></div><p class="rq">&ldquo;' +
+              esc(x.q) +
+              "&rdquo;</p>" +
+              row("Who", x.okC, x.who.join(" or "), x.pc) +
+              row(
+                "Game",
+                x.okG,
+                x.game
+                  .map(function (g) {
+                    return GAMES[g];
+                  })
+                  .join(" or "),
+                GAMES[x.pg],
+              ) +
+              "</li>"
+            );
+          });
+          app.innerHTML =
+            '<section class="screen"><h1>Answers<small>Resident Evil</small></h1><div class="rule"></div><div class="panel"><ul class="rv">' +
+            items.join("") +
+            '</ul></div><button class="btn ghost" id="bk">Back</button></section>';
+          window.scrollTo(0, 0);
+          document.getElementById("bk").onclick = function () {
+            show(back.replace('<div id="flash"></div>', ""));
+          };
         }
         function board(me, back) {
           var key = (me || "").toLowerCase();
@@ -1178,9 +1305,8 @@
             };
           }
           function draw(list, note) {
-            var rows = sorted(list)
-              .slice(0, 20)
-              .map(function (e, i) {
+            function rows(arr, empty) {
+              var r = arr.slice(0, 20).map(function (e, i) {
                 return (
                   "<li" +
                   (e.name.toLowerCase() === key ? ' class="me"' : "") +
@@ -1195,11 +1321,21 @@
                   "</span></li>"
                 );
               });
+              return r.length
+                ? '<ul class="board">' + r.join("") + "</ul>"
+                : '<p style="margin:0;color:var(--mute)">' + empty + "</p>";
+            }
+            var all = sorted(list);
             head(
-              "<h3>Top survivors</h3>" +
-                (rows.length
-                  ? '<ul class="board">' + rows.join("") + "</ul>"
-                  : '<p style="margin:0;color:var(--mute)">No survivors yet. Be the first.</p>'),
+              "<h3>Top survivors<small>8+ points</small></h3>" +
+                rows(all.filter(isSurv), "No survivors yet. Be the first.") +
+                '</div><div class="panel"><h3>The dead<small>under 8</small></h3>' +
+                rows(
+                  all.filter(function (e) {
+                    return !isSurv(e);
+                  }),
+                  "Nobody has fallen yet.",
+                ),
               note,
             );
           }
@@ -1226,7 +1362,7 @@
             '<section class="screen"><h1>Who said it?<small>Resident Evil</small></h1><div class="rule"></div>' +
             "<p>Raccoon City needs survivors. Match each line to the character and the game it came from.</p>" +
             '<div class="panel"><h3>Mission</h3><ul><li>10 rounds that get harder: Rookie, Veteran, Nightmare</li><li>Pick the character and the game, then lock in</li><li>Each correct answer is worth 0.5 point</li><li>Top the scoreboard: highest score wins, fastest time breaks ties</li></ul></div>' +
-            '<div class="panel"><h3>Rewards</h3><div class="tiers"><div class="tier"><strong>8+</strong>points<span>1 token</span></div><div class="tier"><strong>10</strong>points<span>2 tokens</span></div></div><p style="margin:12px 0 0;font-size:15px;color:var(--mute)">Show your final screen to a Shellmates staff member.</p></div>' +
+            '<div class="panel"><h3>Rewards</h3><div class="tiers"><div class="tier"><strong>8+</strong>points<span>1 peseta</span></div><div class="tier"><strong>10</strong>points<span>2 pesetas</span></div></div><p style="margin:12px 0 0;font-size:15px;color:var(--mute)">Show your final screen to a Shellmates staff member.</p></div>' +
             '<div class="field"><label for="nm">Survivor name</label><input id="nm" maxlength="14" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Enter your name" value="' +
             esc(NAME) +
             '"></div>' +
@@ -1404,10 +1540,20 @@
           };
         }
         function lock() {
-          var r = S.qs[S.i];
-          S.score +=
-            ([].concat(r.who).indexOf(S.pc) > -1 ? 0.5 : 0) +
-            ([].concat(r.game).indexOf(S.pg) > -1 ? 0.5 : 0);
+          var r = S.qs[S.i],
+            okC = [].concat(r.who).indexOf(S.pc) > -1,
+            okG = [].concat(r.game).indexOf(S.pg) > -1;
+          (S.log = S.log || []).push({
+            d: r.d,
+            q: r.q,
+            who: [].concat(r.who),
+            game: [].concat(r.game),
+            pc: S.pc,
+            pg: S.pg,
+            okC: okC,
+            okG: okG,
+          });
+          S.score += (okC ? 0.5 : 0) + (okG ? 0.5 : 0);
           S.i++;
           if (S.i >= ROUNDS) finish();
           else round();
@@ -1447,10 +1593,8 @@
           var info =
             '<div class="code">' +
             esc(S.name) +
-            ' &middot; <span id="rk">#' +
-            rk.rank +
-            "/" +
-            rk.total +
+            ' &middot; <span id="rk">' +
+            rk +
             "</span>" +
             "<br>" +
             code +
@@ -1459,7 +1603,7 @@
             "<br>" +
             esc(d.toLocaleString()) +
             "</div>" +
-            '<button class="btn" id="sb">Scoreboard</button><button class="btn ghost" id="nw">New player</button>';
+            '<button class="btn" id="sb">Scoreboard</button><button class="btn ghost" id="rv">Review answers</button><button class="btn ghost" id="nw">New player</button>';
           if (tk === 0) {
             var word = Math.random() < 0.5 ? "You are dead" : "Infected";
             document.body.classList.add("lost");
@@ -1477,7 +1621,7 @@
                 '<div class="score">' +
                 fmt(sc) +
                 "<small> / 10</small></div>" +
-                '<div class="verdict"><div class="big">No token this time</div><div class="hint">8 points for 1 token, 10 for 2</div></div>' +
+                '<div class="verdict"><div class="big">No peseta this time</div><div class="hint">8 points for 1 peseta, 10 for 2</div></div>' +
                 info +
                 "</section>",
             );
@@ -1497,7 +1641,7 @@
                 '<div class="verdict"><div class="big">' +
                 big +
                 '</div><div class="sub">' +
-                (tk === 2 ? "2 tokens" : "1 token") +
+                (tk === 2 ? "2 pesetas" : "1 peseta") +
                 '</div><div class="hint">Show this screen to a staff member</div></div>' +
                 info +
                 "</section>",
