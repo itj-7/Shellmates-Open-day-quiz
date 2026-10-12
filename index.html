@@ -301,7 +301,7 @@
       }
       .tiers {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
       .tier {
@@ -1255,7 +1255,7 @@
             '<section class="screen"><h1>Who said it?<small>Resident Evil</small></h1><div class="rule"></div>' +
             "<p>Raccoon City needs survivors. Match each line to the character and the game it came from.</p>" +
             '<div class="panel"><h3>Mission</h3><ul><li>10 rounds that get harder: Rookie, Veteran, Nightmare</li><li>Pick the character and the game, then lock in</li><li>Each correct answer is worth 0.5 point</li><li>Top the scoreboard: highest score wins, fastest time breaks ties</li></ul></div>' +
-            '<div class="panel"><h3>Rewards</h3><div class="tiers"><div class="tier"><strong>8+</strong>points<span>1 peseta</span></div></div><p style="margin:12px 0 0;font-size:15px;color:var(--mute)">Show your final screen to a Shellmates staff member.</p></div>' +
+            '<div class="panel"><h3>Rewards</h3><div class="tiers"><div class="tier"><strong>8+</strong>points<span>2 pesetas</span></div><div class="tier"><strong>10</strong>points<span>3 pesetas</span></div></div><p style="margin:12px 0 0;font-size:15px;color:var(--mute)">Show your final screen to a Shellmates staff member.</p></div>' +
             '<div class="field"><label for="nm">Survivor name</label><input id="nm" maxlength="14" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Enter your name" value="' +
             esc(NAME) +
             '"></div>' +
@@ -1462,7 +1462,7 @@
         window.addEventListener("orientationchange", fit);
         function finish() {
           var sc = S.score,
-            tk = sc >= 8 ? 1 : 0;
+            tk = sc >= 10 ? 3 : sc >= 8 ? 2 : 0;
           var d = new Date();
           S.t = Math.round((d.getTime() - S.t0) / 1000);
           var code =
@@ -1504,7 +1504,7 @@
                 '<div class="score">' +
                 fmt(sc) +
                 "<small> / 10</small></div>" +
-                '<div class="verdict"><div class="big">No peseta this time</div><div class="hint">Score 8 points or more to win 1 peseta</div></div>' +
+                '<div class="verdict"><div class="big">No peseta this time</div><div class="hint">8 points for 2 pesetas, 10 for 3</div></div>' +
                 info +
                 "</section>",
             );
@@ -1524,7 +1524,7 @@
                 '<div class="verdict"><div class="big">' +
                 big +
                 '</div><div class="sub">' +
-                "1 peseta" +
+                tk + " pesetas" +
                 '</div><div class="hint">Show this screen to a staff member</div></div>' +
                 info +
                 "</section>",
